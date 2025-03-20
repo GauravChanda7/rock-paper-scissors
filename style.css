@@ -1,0 +1,52 @@
+body {
+    background-color: darkseagreen;
+}
+
+h1 {
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 40px;
+    font-weight: bolder;
+}
+
+#round {
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 28px;
+}
+
+#choice {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 160px;
+}
+
+#human-options, #computer-choice {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+}
+
+#human-options img, #computer-choice img {
+    height: 140px;
+    width: 136px;
+    border: 4px solid blueviolet;
+    border-radius: 28px;
+}
+
+h2 {
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 28px;
+    font-weight: bolder;
+}
+
+#human-score, #computer-score {
+    background-color: azure;
+    border-radius: 20px;
+    padding: 0 8px 0;
+}
