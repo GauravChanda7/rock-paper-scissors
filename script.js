@@ -1,85 +1,82 @@
 'use strict'
 
-let computerScore = 0;
 let humanScore = 0;
-let rounds = 1;
+let computerScore = 0;
+let round = 0;
+let handleOptionClick = null;
 
 function getComputerChoice() {
-    let randomNum = Math.floor(Math.random() * 3);
-    let computerChoice;
+    const computerImage = document.querySelector('#computer-choice img');
+    let choice = Math.floor(Math.random() * 3);
 
-    switch (randomNum) {
+    switch (choice) {
         case 0:
-            computerChoice = 'rock';
-            break;
-        
+            computerImage.src = 'images/rock.jpg';
+            return 'rock';
         case 1:
-            computerChoice = 'paper';
-            break;
-
+            computerImage.src = 'images/paper.jpg';
+            return 'paper';
         case 2:
-            computerChoice = 'scissor'
-            break;
-
-        default:
-            computerChoice = '';
-            break;
-    }
-
-    return computerChoice;
-}
-
-function getHumanChoice() {
-    let humanChoice = prompt('Enter: Rock, Paper or Scissor', '');
-    humanChoice = humanChoice.toLowerCase().trim();
-
-    if (humanChoice === 'rock' || humanChoice === 'paper' || humanChoice === 'scissor'){
-        return humanChoice;
-    } else {
-        alert('Enter choice correctly');
-        return '';
+            computerImage.src = 'images/scissor.jpg';
+            return 'scissor';
     }
 }
 
-function title(word) {
-    return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
+function getHumanChoice(callback) {
+    const humanOptions = document.querySelector('#human-options');
+    handleOptionClick = (event) => {
+        let target = event.target;
+
+        switch (target.id) {
+            case 'rock':
+            case 'paper':
+            case 'scissor':
+                callback(target.id);
+                break;
+            default:
+                break;
+        }
+    }
+    humanOptions.addEventListener('click', handleOptionClick);
 }
 
-function resultMessage(firstChoice, secondChoice){
-    return `${title(firstChoice)} beats ${title(secondChoice)}`;
+function removeHumanChoice(){
+    const humanOptions = document.querySelector('#human-options');
+    humanOptions.removeEventListener('click', handleOptionClick);
+    handleOptionClick = null;
 }
 
-function playRound() {
+function handleHumanChoice(humanChoice) {
+    playRound(humanChoice);
+}
+
+function playRound(humanChoice){
     let computerChoice = getComputerChoice();
-    let humanChoice = getHumanChoice();
 
-    while (humanChoice === ''){
-        humanChoice = getHumanChoice();
-    }
+    if (humanChoice == 'rock' && computerChoice == 'paper' ||
+        humanChoice == 'paper' && computerChoice == 'scissor' ||
+        humanChoice == 'scissor' && computerChoice == 'rock') {computerScore++}
+    
+    else if (computerChoice == 'rock' && humanChoice == 'paper' ||
+        computerChoice == 'paper' && humanChoice == 'scissor' ||
+        computerChoice == 'scissor' && humanChoice == 'rock') {humanScore++}
 
-    if (computerChoice === 'rock' && humanChoice === 'scissor'){
-        computerScore++;
-        console.log(`You loose! ${resultMessage(computerChoice, humanChoice)}`);
-    } else if (computerChoice === 'scissor' && humanChoice === 'paper'){
-        computerScore++;
-        console.log(`You loose! ${resultMessage(computerChoice, humanChoice)}`);
-    } else if (computerChoice === 'paper' && humanChoice === 'rock'){
-        computerScore++;
-        console.log(`You loose! ${resultMessage(computerChoice, humanChoice)}`);
-    } else{
-        humanScore++;
-        console.log(`You win! ${resultMessage(computerChoice, humanChoice)}`);
-    }
+    round++;
+
+    displayValues(humanScore, computerScore, round);
+    if (round == 5) removeHumanChoice();
+
+}
+
+function displayValues(humanScore, computerScore, round) {
+    const roundDisplay = document.querySelector('#round h2');
+    const humanScoreDisplay = document.querySelector('#human-score #value');
+    const computerScoreDisplay = document.querySelector('#computer-score #value');
+
+    roundDisplay.textContent = round;
+    humanScoreDisplay.textContent = humanScore;
+    computerScoreDisplay.textContent = computerScore;
 }
 
 
-function playGame(rounds){
-    while (rounds <= 5){
-        console.log(`Round: ${rounds}`)
-        playRound();
-        console.log(`You: ${humanScore} | Computer: ${computerScore}`);
-        rounds++;
-    }
-}
-
-playGame(rounds);
+getHumanChoice(handleHumanChoice);
